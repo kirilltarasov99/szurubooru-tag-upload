@@ -1,9 +1,15 @@
-from PicImageSearch import Iqdb
 import asyncio
 import re
+from PicImageSearch import Iqdb
+from pathlib import Path
+import click
 
 iqdb = Iqdb()
 
+@click.command()
+@click.option('--path', type=str)
+@click.option('--url', type=str)
+@click.option('--key', type=str)
 
 async def find_image(filepath, similarity):
     results = await iqdb.search(file=filepath)
@@ -41,8 +47,21 @@ async def tag_interrogate(filepath):
     return tags
 
 
+def main(**kwargs):
+    folder = Path(kwargs['path']).resolve()
+    paths_files = [p for p in folder.rglob("*") if p.is_file()]
+
+    for image in paths_files:
+        relative = image.relative_to(folder)
+        folder_tags = list(relative.parent.parts)
+
+        tags, rating, link = asyncio.run(find_image(image, 85))
+        if not tags:
+            tags = asyncio.run(tag_interrogate(image))
+            tags.append('ai_generated')
+        
+        tags.extend(folder_tags)
+
+
 if __name__ == "__main__":
-    tags, rating, link = asyncio.run(find_image('0c11e9702d96d2c40401fbd9c8d5e7f9.jpg', 85))
-    if not tags:
-        tags = asyncio.run(tag_interrogate('0c11e9702d96d2c40401fbd9c8d5e7f9.jpg'))
-    
+    main()
