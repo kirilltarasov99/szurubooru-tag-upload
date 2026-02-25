@@ -1,0 +1,6 @@
+FROM python:3.10-slim
+WORKDIR /app
+COPY requirements_uploader.txt .
+RUN pip install --no-cache-dir -r requirements_uploader.txt
+COPY tag_batch.py .
+RUN python3 tag_batch.py

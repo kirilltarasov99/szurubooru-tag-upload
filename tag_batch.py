@@ -1,7 +1,6 @@
 import requests
 import asyncio
 import base64
-import argparse
 import os
 import time
 import json
@@ -21,9 +20,6 @@ celery_client = Celery(
     backend='redis://redis:6379/0'
     )
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-p", "--path", help="Path to folder")
 
 def btoa(txt: str):
     return base64.b64encode(txt.encode()).decode()
@@ -121,5 +117,5 @@ def main(path):
 
 
 if __name__ == "__main__":
-    args = parser.parse_args()
-    main(args.path)
+    path = os.environ.get("IMAGES_PATH")
+    main(path)
