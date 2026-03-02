@@ -9,7 +9,6 @@ from typing import Final
 from pathlib import Path
 from celery import Celery
 
-API_URL: Final = os.environ.get("LOCAL_TAG_API")
 BOORU_API_URL: Final = os.environ.get("BOORU_API_URL")
 USERNAME: Final = os.environ.get("BOORU_USERNAME")
 LOGIN_TOKEN: Final = os.environ.get("BOORU_TOKEN")
@@ -73,7 +72,7 @@ async def upload(file, tags, safety, source):
 
         try:
             post_data = session.post(
-                f"{API_URL}/posts",
+                f"{BOORU_API_URL}/posts",
                 json={"contentToken": file_token, "safety": safety, "tags": tags, "source": source},
                 headers={"Content-Type": "application/json"},
             )
