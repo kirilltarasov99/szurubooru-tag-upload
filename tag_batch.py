@@ -23,7 +23,7 @@ logging.basicConfig(
 celery_client = Celery(
     'tagger',
     broker='redis://redis:6379/0',
-    backend='redis://redis:6379/0'
+    backend='redis://redis:6379/0',
     )
 
 
@@ -93,8 +93,6 @@ async def upload(file, tags, safety, source):
             except json.JSONDecodeError:
                 print("Response body:", post_data.text)
             raise
-        finally:
-            uploadfile.close()  # clean up file handle
 
 
 def main(path):
@@ -118,7 +116,7 @@ def main(path):
 
                 break
             
-        print("pass")
+        logger.info(f"pass {image}")
         asyncio.run(upload(image, tags, safety, source))
 
 
