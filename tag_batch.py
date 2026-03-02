@@ -117,5 +117,5 @@ def main(path):
 
 
 if __name__ == "__main__":
-    path = os.environ.get("IMAGES_PATH")
+    path = "/app/data"
     main(path)
