@@ -2,6 +2,7 @@ FROM python:3.10-slim
 WORKDIR /app
 COPY requirements_tagger.txt .
 RUN pip install --no-cache-dir -r requirements_tagger.txt
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/corkborg/wd14-tagger-standalone.git wd14tagger
 RUN pip install --no-cache-dir -r wd14tagger/requirements.txt
 COPY tagger.py .
