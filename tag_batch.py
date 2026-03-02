@@ -4,6 +4,7 @@ import base64
 import os
 import time
 import json
+import logging
 
 from typing import Final
 from pathlib import Path
@@ -12,6 +13,12 @@ from celery import Celery
 BOORU_API_URL: Final = os.environ.get("BOORU_API_URL")
 USERNAME: Final = os.environ.get("BOORU_USERNAME")
 LOGIN_TOKEN: Final = os.environ.get("BOORU_TOKEN")
+
+logging.basicConfig(
+    level=os.environ.get("LOGLEVEL", "INFO").upper(), # Set log level via env var
+    format='%(asctime)s [%(name)-12s] %(levelname)-8s %(message)s',
+    handlers=[logging.StreamHandler()] # Explicitly use StreamHandler
+)
 
 celery_client = Celery(
     'tagger',
@@ -116,5 +123,6 @@ def main(path):
 
 
 if __name__ == "__main__":
+    logger = logging.getLogger(__name__)
     path = "/app/data"
     main(path)
